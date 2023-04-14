@@ -28,28 +28,34 @@ class Api {
             .then(this._checkResponse);
     }
 
-    editUserInfo(name, info) {
+    editUserInfo(userData) {
         return fetch(`${this._baseUrl}/users/me`, {
-            method: "PATCH",
+            method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify({
-                name: name,
-                about: info,
-            }),
+                name: userData.name,
+                about: userData.about
+            })
         })
-            .then(this._checkResponse);
+            .then(res => this._checkResponse(res))
+            .catch(err => {
+                console.log(err);
+            });
     }
 
-    addCard(name, link) {
+    addCard(cardData) {
         return fetch(`${this._baseUrl}/cards`, {
-            method: "POST",
+            method: 'POST',
             headers: this._headers,
             body: JSON.stringify({
-                name: name,
-                link: link,
-            }),
+                name: cardData.name,
+                link: cardData.link
+            })
         })
-            .then(this._checkResponse);
+            .then(res => this._checkResponse(res))
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     deleteCard(id) {
@@ -64,7 +70,7 @@ class Api {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: "PATCH",
             headers: this._headers,
-            body: JSON.stringify({avatar: body,}),
+            body: JSON.stringify({avatar: body}),
         })
             .then(this._checkResponse);
     }
@@ -77,12 +83,15 @@ class Api {
             .then(this._checkResponse);
     }
 
-    deleteLike(id) {
-        return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-            method: "DELETE",
-            headers: this._headers,
+    changeLikeCardStatus(cardId, isLike) {
+        return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+            method: isLike ? 'DELETE' : 'PUT',
+            headers: this._headers
         })
-            .then(this._checkResponse);
+            .then(res => this._checkResponse(res))
+            .catch(err => {
+                console.log(err);
+            });
     }
 }
 
